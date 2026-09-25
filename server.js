@@ -25,7 +25,7 @@ const ATOUTS={"Socrate": {"name": "Ironie socratique", "effect": "Substitue alé
 const rand=n=>crypto.randomBytes(n).toString('hex'); const safeName=s=>String(s||'').trim().slice(0,24)||'Joueur';
 const shuffle=source=>{const a=[...source];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 function roomCode(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';let s;do s=Array.from({length:6},()=>chars[Math.floor(Math.random()*chars.length)]).join('');while(rooms.has(s));return s}
-function portraitPath(){return null} function clampScore(n){return Math.max(0,Math.round(n))}
+function portraitPath(c){return c?.portrait || null} function clampScore(n){return Math.max(0,Math.round(n))}
 function participants(room){if(room.tiePlayers.length)return room.tiePlayers.filter(id=>room.players.get(id)?.deck.length);return [...room.players.values()].filter(p=>p.deck.length).map(p=>p.id)}
 function powerForCard(c){return c?ATOUTS[c.Philosophe]||null:null}
 function statusEffects(room,pid){const a=[];if(room.forcedCategory?.remaining)a.push(`${room.forcedCategory.category} imposée · ${room.forcedCategory.remaining}`);if(room.leaderPenalty?.remaining)a.push(`Banalité du mal · ${room.leaderPenalty.remaining}`);if(room.maskScores?.remaining)a.push(`Scores masqués · ${room.maskScores.remaining}`);if(room.protectedRounds[pid]>0)a.push(`Protection · ${room.protectedRounds[pid]}`);if(room.foucaultRounds[pid]>0)a.push(`Volonté de savoir · ${room.foucaultRounds[pid]}`);if(room.millRounds[pid]>0)a.push(`Liberté individuelle · ${room.millRounds[pid]}`);if(room.leaderLock?.pid===pid&&room.leaderLock.remaining>0)a.push(`Maître · ${room.leaderLock.remaining}`);return a}
